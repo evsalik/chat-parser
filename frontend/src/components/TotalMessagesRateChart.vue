@@ -64,6 +64,6 @@ export default {
 <style scoped>
 .chart-container {
   height: 40vh;
-  width: 40vw;
+  width: 10vw;
 }
 </style>

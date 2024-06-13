@@ -4,27 +4,31 @@ from werkzeug.utils import secure_filename
 import os
 import json
 from collections import Counter
+import re
 
 app = Flask(__name__)
-CORS(app)  # This will enable CORS for all routes
+CORS(app)
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 
 def process_statistics(data):
     messages = data['messages']
     total_messages = len(messages)
 
-    # Count messages by each user
     user_messages = Counter([message['from'] for message in messages if 'from' in message])
     most_active_user = user_messages.most_common(1)[0] if user_messages else ("N/A", 0)
-
-    # Calculate percentage of messages by each user
-    user_percentages = {user: (count / total_messages) * 100 for user, count in user_messages.items()}
     
+    text_content = ' '.join(
+        [message['text'] if isinstance(message['text'], str) else ' '.join([part['text'] for part in message['text'] if isinstance(part, dict)]) for message in messages if 'text' in message]
+    ).lower()
+    words = re.findall(r'\b\w+\b', text_content)
+    word_frequencies = Counter(words).most_common(500)
+
     return {
         "total_messages": total_messages,
         "most_active_user": most_active_user,
-        "user_percentages": user_percentages,
-        "user_message_counts": user_messages
+        "user_message_counts": dict(user_messages),
+        "user_percentages": {user: (count / total_messages) * 100 for user, count in user_messages.items()},
+        "word_frequencies": word_frequencies
     }
 
 @app.route('/upload', methods=['POST'])

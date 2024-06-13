@@ -11,6 +11,8 @@
         </li>
       </ul>
       <TotalMessagesRateChart :userMessageCounts="statistics.user_message_counts" />
+      <CommonWordsList :commonWords="statistics.word_frequencies" />
+      <CommonWordsChart :commonWords="statistics.word_frequencies" />
     </div>
     <div v-else>
       <p>Loading statistics...</p>
@@ -19,9 +21,16 @@
 </template>
 
 <script>
-import TotalMessagesRateChart from './TotalMessagesRateChart.vue'
+import TotalMessagesRateChart from './TotalMessagesRateChart.vue';
+import CommonWordsList from './CommonWordsList.vue';
+import CommonWordsChart from './CommonWordsChart.vue';
 
 export default {
+  components: {
+    TotalMessagesRateChart,
+    CommonWordsList,
+    CommonWordsChart,
+  },
   props: {
     statistics: {
       type: Object,
@@ -29,11 +38,7 @@ export default {
       default: () => ({}),
     },
   },
-  components: {
-    TotalMessagesRateChart
-  },
   created() {
-    // Parse statistics from query parameters
     const stats = this.$route.query.statistics;
     if (stats) {
       this.statistics = JSON.parse(stats);
@@ -49,5 +54,4 @@ export default {
 </script>
 
 <style>
-/* Add your styles here */
 </style>
