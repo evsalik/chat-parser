@@ -10,6 +10,7 @@
           {{ user }} - {{ percentage.toFixed(2) }}% ({{ statistics.user_message_counts[user] }} messages)
         </li>
       </ul>
+      <TotalMessagesRateChart :userMessageCounts="statistics.user_message_counts" />
     </div>
     <div v-else>
       <p>Loading statistics...</p>
@@ -18,6 +19,8 @@
 </template>
 
 <script>
+import TotalMessagesRateChart from './TotalMessagesRateChart.vue'
+
 export default {
   props: {
     statistics: {
@@ -26,13 +29,16 @@ export default {
       default: () => ({}),
     },
   },
+  components: {
+    TotalMessagesRateChart
+  },
   created() {
     // Parse statistics from query parameters
     const stats = this.$route.query.statistics;
     if (stats) {
       this.statistics = JSON.parse(stats);
     }
-    console.log("Statistics:", this.statistics);  // Debugging line
+    console.log("Statistics in created:", this.statistics);  // Debugging line
   },
   data() {
     return {
