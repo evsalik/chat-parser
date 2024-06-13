@@ -3,6 +3,13 @@
     <h1>Chat Statistics</h1>
     <div v-if="statistics">
       <p>Total Messages: {{ statistics.total_messages }}</p>
+      <p>Most active user: {{ statistics.most_active_user[0] }}</p>
+      <h2>Percentage Rate:</h2>
+      <ul>
+        <li v-for="(percentage, user) in statistics.user_percentages" :key="user">
+          {{ user }} - {{ percentage.toFixed(2) }}% ({{ statistics.user_message_counts[user] }} messages)
+        </li>
+      </ul>
     </div>
     <div v-else>
       <p>Loading statistics...</p>
