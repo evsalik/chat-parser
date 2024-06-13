@@ -1,40 +1,41 @@
 <template>
   <div class="chart-container">
-    <h2>User Message Count Chart</h2>
+    <h2>Messages Per Weekday</h2>
     <Bar :data="chartData" :options="chartOptions" />
   </div>
 </template>
 
 <script>
-import { Bar } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+import { Bar } from 'vue-chartjs';
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 export default {
-  name: 'TotalMessagesRateChart',
+  name: 'MessagesPerWeekdayChart',
   components: {
     Bar
   },
   props: {
-    userMessageCounts: {
+    messagesPerWeekday: {
       type: Object,
       required: true
     }
   },
   computed: {
     chartData() {
-      console.log("User Message Counts:", this.userMessageCounts)
+      const labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      const data = labels.map(day => this.messagesPerWeekday[day] || 0);
       return {
-        labels: Object.keys(this.userMessageCounts),
+        labels,
         datasets: [
           {
-            label: 'Message Count',
+            label: 'Messages',
             backgroundColor: '#000000',
-            data: Object.values(this.userMessageCounts)
-          }
-        ]
-      }
+            data,
+          },
+        ],
+      };
     },
     chartOptions() {
       return {
@@ -45,25 +46,27 @@ export default {
             beginAtZero: true,
             title: {
               display: true,
-              text: 'Message Count'
+              text: 'Number of Messages'
             }
           },
           x: {
             title: {
               display: true,
-              text: 'Users'
+              text: 'Weekday'
             }
           }
         }
-      }
+      };
     }
   }
-}
+};
 </script>
 
 <style scoped>
 .chart-container {
-  height: 40vh;
-  width: 10%;
+  position: relative;
+  margin-top: 4vw;
+  height: 60vh;
+  width: 40%;
 }
 </style>

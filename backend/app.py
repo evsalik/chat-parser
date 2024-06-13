@@ -3,7 +3,7 @@ from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import os
 import json
-from collections import Counter
+from collections import Counter, defaultdict
 import re
 from datetime import datetime
 
@@ -33,6 +33,19 @@ def process_statistics(data):
     messages_per_week = Counter(
         [f"{datetime.strptime(message['date'], '%Y-%m-%dT%H:%M:%S').isocalendar()[0]}-W{datetime.strptime(message['date'], '%Y-%m-%dT%H:%M:%S').isocalendar()[1]:02d}" for message in messages]
     )
+    
+    messages_per_weekday = Counter([datetime.strptime(message['date'], "%Y-%m-%dT%H:%M:%S").strftime('%A') for message in messages])
+
+    first_message_per_day = defaultdict(list)
+    for message in messages:
+        date = datetime.strptime(message['date'], "%Y-%m-%dT%H:%M:%S").date().isoformat()
+        first_message_per_day[date].append(message)
+
+    first_message_count = Counter()
+    for date, messages in first_message_per_day.items():
+        first_message = min(messages, key=lambda x: x['date'])
+        if 'from' in first_message:
+            first_message_count[first_message['from']] += 1
 
     return {
         "total_messages": total_messages,
@@ -41,7 +54,9 @@ def process_statistics(data):
         "user_percentages": {user: (count / total_messages) * 100 for user, count in user_messages.items()},
         "word_frequencies": word_frequencies,
         "messages_per_day": dict(messages_per_day),
-        "messages_per_week": dict(messages_per_week)
+        "messages_per_week": dict(messages_per_week),
+        "messages_per_weekday": dict(messages_per_weekday),
+        "first_message_count": dict(first_message_count)
     }
 
 @app.route('/upload', methods=['POST'])

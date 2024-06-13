@@ -15,6 +15,8 @@
       <CommonWordsChart :commonWords="statistics.word_frequencies" />
       <MessagesPerDayChart :messagesPerDay="statistics.messages_per_day" />
       <MessagesPerWeekChart :messagesPerWeek="statistics.messages_per_week" />
+      <MessagesPerWeekdayChart :messagesPerWeekday="statistics.messages_per_weekday" />
+      <FirstMessagesChart :firstMessageCount="statistics.first_message_count" />
     </div>
     <div v-else>
       <p>Loading statistics...</p>
@@ -28,6 +30,8 @@ import CommonWordsList from './CommonWordsList.vue';
 import CommonWordsChart from './CommonWordsChart.vue';
 import MessagesPerDayChart from './MessagesPerDayChart.vue';
 import MessagesPerWeekChart from './MessagesPerWeekChart.vue';
+import MessagesPerWeekdayChart from './MessagesPerWeekdayChart.vue';
+import FirstMessagesChart from './FirstMessagesChart.vue';
 
 export default {
   components: {
@@ -36,6 +40,8 @@ export default {
     CommonWordsChart,
     MessagesPerDayChart,
     MessagesPerWeekChart,
+    MessagesPerWeekdayChart,
+    FirstMessagesChart,
   },
   props: {
     statistics: {
