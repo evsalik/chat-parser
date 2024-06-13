@@ -5,6 +5,7 @@ import os
 import json
 from collections import Counter
 import re
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -16,19 +17,31 @@ def process_statistics(data):
 
     user_messages = Counter([message['from'] for message in messages if 'from' in message])
     most_active_user = user_messages.most_common(1)[0] if user_messages else ("N/A", 0)
-    
-    text_content = ' '.join(
-        [message['text'] if isinstance(message['text'], str) else ' '.join([part['text'] for part in message['text'] if isinstance(part, dict)]) for message in messages if 'text' in message]
-    ).lower()
-    words = re.findall(r'\b\w+\b', text_content)
-    word_frequencies = Counter(words).most_common(500)
+
+    all_words = []
+    for message in messages:
+        if 'text' in message:
+            if isinstance(message['text'], list):
+                text_content = ' '.join([part['text'] for part in message['text'] if isinstance(part, dict) and 'text' in part])
+            else:
+                text_content = message['text']
+            words = re.findall(r'\b\w+\b', text_content.lower())
+            all_words.extend(words)
+    word_frequencies = Counter(all_words).most_common(500)
+
+    messages_per_day = Counter([datetime.strptime(message['date'], "%Y-%m-%dT%H:%M:%S").date().isoformat() for message in messages])
+    messages_per_week = Counter(
+        [f"{datetime.strptime(message['date'], '%Y-%m-%dT%H:%M:%S').isocalendar()[0]}-W{datetime.strptime(message['date'], '%Y-%m-%dT%H:%M:%S').isocalendar()[1]:02d}" for message in messages]
+    )
 
     return {
         "total_messages": total_messages,
         "most_active_user": most_active_user,
         "user_message_counts": dict(user_messages),
         "user_percentages": {user: (count / total_messages) * 100 for user, count in user_messages.items()},
-        "word_frequencies": word_frequencies
+        "word_frequencies": word_frequencies,
+        "messages_per_day": dict(messages_per_day),
+        "messages_per_week": dict(messages_per_week)
     }
 
 @app.route('/upload', methods=['POST'])
