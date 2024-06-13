@@ -1,8 +1,8 @@
+import json
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os
 from werkzeug.utils import secure_filename
-import json
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -19,17 +19,17 @@ def upload_file():
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
-        with open(filepath, 'r') as f:
+        with open(filepath) as f:
             data = json.load(f)
-        statistics = {
-            "total_messages": len(data),
-            # Add more statistics here
-        }
+            num_messages = len(data['messages'])
+            # Process the JSON data here
+            statistics = {
+                "total_messages": num_messages,
+                # Add more statistics here if needed
+            }
         return jsonify(statistics)
     else:
         return jsonify({"error": "Invalid file format"}), 400
 
 if __name__ == '__main__':
-    if not os.path.exists('uploads'):
-        os.makedirs('uploads')
     app.run(debug=True)

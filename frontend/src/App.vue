@@ -1,54 +1,12 @@
 <template>
   <div id="app">
-    <h1>Upload Chat JSON</h1>
-    <input type="file" @change="handleFileUpload" />
-    <button @click="uploadFile">Upload</button>
-    <div v-if="statistics">
-      <h2>Chat Statistics</h2>
-      <p>Total Messages: {{ statistics.total_messages }}</p>
-      <!-- Add more statistics display here -->
-    </div>
-    <div v-if="error" style="color: red;">
-      <p>{{ error }}</p>
-    </div>
+    <router-view />
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
-  data() {
-    return {
-      file: null,
-      statistics: null,
-      error: null,
-    };
-  },
-  methods: {
-    handleFileUpload(event) {
-      this.file = event.target.files[0];
-    },
-    async uploadFile() {
-      if (!this.file) {
-        this.error = "No file selected";
-        return;
-      }
-      this.error = null;
-      let formData = new FormData();
-      formData.append('file', this.file);
-      try {
-        const response = await axios.post('http://127.0.0.1:5000/upload', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        this.statistics = response.data;
-      } catch (error) {
-        this.error = 'Error uploading file: ' + (error.response ? error.response.data.error : error.message);
-      }
-    },
-  },
+  name: "App",
 };
 </script>
 

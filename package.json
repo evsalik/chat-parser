@@ -1,5 +1,14 @@
 {
-  "dependencies": {
-    "axios": "^1.7.2"
+  "name": "parser-v0",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "start": "concurrently \"yarn workspace frontend serve\" \"yarn workspace backend start\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }
