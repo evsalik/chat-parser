@@ -3,7 +3,7 @@
     <h1>Upload Chat JSON</h1>
     <input type="file" @change="handleFileUpload" />
     <button @click="uploadFile" :disabled="isLoading">Upload</button>
-    <div v-if="isLoading">Loading...</div>
+    <div v-if="isLoading">Analizando...</div>
     <div v-if="error" style="color: red;">
       <p>{{ error }}</p>
     </div>

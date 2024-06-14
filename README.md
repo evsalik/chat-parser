@@ -8,6 +8,7 @@ This template should help get you started developing with Vue 3 and TypeScript i
 
 - Use [vue-tsc](https://github.com/vuejs/language-tools/tree/master/packages/tsc) for performing the same type checking from the command line, or for generating d.ts files for SFCs.
 
+
 ```
 parser-v0
 ├─ .gitignore
@@ -29,6 +30,9 @@ parser-v0
 │  │  │  ├─ CommonWordsChart.vue
 │  │  │  ├─ CommonWordsList.vue
 │  │  │  ├─ FirstMessagesChart.vue
+│  │  │  ├─ MessageLengthDistributionChart.vue
+│  │  │  ├─ MessagesByHourChart.vue
+│  │  │  ├─ MessagesByMonthChart.vue
 │  │  │  ├─ MessagesPerDayChart.vue
 │  │  │  ├─ MessagesPerWeekChart.vue
 │  │  │  ├─ MessagesPerWeekdayChart.vue

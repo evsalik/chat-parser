@@ -1,9 +1,9 @@
 <template>
   <div class="list-container">
     <h2>500 Most Common Words</h2>
-    <ul>
+    <ol>
       <li v-for="(word, index) in commonWords" :key="index">{{ word[0] }} - {{ word[1] }}</li>
-    </ul>
+    </ol>
   </div>
 </template>
 
@@ -21,7 +21,6 @@ export default {
 
 <style>
 .list-container {
-  margin-top: 4vw;
   height: 400px;
   overflow-y: scroll;
   border: 1px solid #ddd;

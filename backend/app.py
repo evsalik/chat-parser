@@ -1,3 +1,4 @@
+import random
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
@@ -14,6 +15,9 @@ app.config['UPLOAD_FOLDER'] = 'uploads/'
 
 logging.basicConfig(level=logging.DEBUG)
 
+RUSSIAN_SWEARS = ['беспиздая', 'бля', 'блядва', 'блядиада', 'блядина', 'блядистость', 'блядки', 'блядовать', 'блядогон', 'блядословник', 'блядский', 'блядство', 'блядун', 'блядь', 'бляхомудия', 'взбляд', 'взъебнуть', 'взъебка', 'взъебывать', 'взъебщик', 'впиздить', 'впиздиться', 'впиздохать', 'впиздохивать', 'впиздохиваться', 'впиздронивать', 'впиздрониться', 'впиздюлить', 'впиздячил', 'впиздячить', 'впизживать', 'впизживаться', 'вхуйнуть', 'вхуйнуться', 'вхуяривание', 'вхуярить', 'выблядовал', 'выблядок', 'выебать', 'выебок', 'выебон', 'выёбывается', 'выпиздеться', 'выпиздить', 'выхуяривание', 'въебать', 'въебывать', 'глупизди', 'говноёб', 'голоёбица', 'греблядь', 'дерьмохеропиздократ', 'дерьмохеропиздократия', 'доебался', 'доебаться', 'доёбывать', 'долбоёб', 'допиздеться', 'дохуйнуть', 'дохуякать', 'дохуякивать', 'дохуяривавться', 'дураёб', 'дядёёб', 'ебалка', 'ебало', 'ебалово', 'ебальник', 'ебанатик', 'ебандеи', 'ебанёшься', 'ебанул', 'ебанулся', 'ебануть', 'ебануться', 'ебанутый', 'ебанько', 'ебаришка', 'ебаторий', 'ебаться', 'ебашит', 'ебеня', 'ебёт', 'ебистика', 'еблан', 'ебланить', 'ебливая', 'ебля', 'ебукентий', 'ёбака', 'ёбаный', 'ёбарь', 'ёбкость', 'ёбля', 'ёбнул', 'ёбнуться', 'ёбнутый', 'ёбс', 'жидоёб', 'жидоёбка', 'жидоёбский', 'заебал', 'заебать', 'заебись', 'заебцовый', 'заебенить', 'заёб', 'заёбанный', 'заебаться', 'запизденевать', 'запиздеть', 'запиздить', 'запизживаться', 'захуяривать', 'захуярить', 'злоебучая', 'изъебнулся', 'испиздился', 'испиздить', 'исхуячить', 'козлоёб', 'козлоёбина', 'козлоёбиться', 'козлоёбище', 'коноёбиться', 'косоёбится', 'многопиздная', 'мозгоёб', 'мудоёб', 'наблядовал', 'наебалово', 'наебать', 'наебаться', 'наебашился', 'наебениться', 'наебнулся', 'наебнуть', 'наёбка', 'нахуеверететь', 'нахуяривать', 'нахуяриться', 'напиздеть', 'напиздить', 'настоебать', 'невъебенный', 'нехуёвый', 'нехуй', 'оберблядь', 'объебал', 'объебалово', 'объебательство', 'объебать', 'объебаться', 'объебос', 'один хуй', 'однохуйственно', 'опизденевать', 'опиздихуительный', 'опиздоумел', 'оскотоёбился', 'остоебал', 'остопиздело', 'остопиздеть', 'остохуеть', 'отпиздить', 'отхуяривать', 'отъебаться', 'охуевать', 'охуенно', 'охуительный', 'охуенный', 'охуячивать', 'охуячить', 'переебать', 'перехуяривать', 'перехуярить', 'пёзды', 'пизда', 'пиздабол', 'пиздаёб', 'пиздакрыл', 'пиздануть', 'пиздануться', 'пиздатый', 'пизделиться', 'пизделякает', 'пиздеть', 'пиздец', 'пиздецкий', 'пиздёж', 'пиздёныш', 'пиздить', 'пиздобол', 'пиздоблошка', 'пиздобрат', 'пиздобратия', 'пиздовать', 'пиздовладелец', 'пиздодушие', 'пиздоёбищность', 'пиздолет', 'пиздолиз', 'пиздомания', 'пиздопляска', 'пиздорванец', 'пиздострадалец', 'пиздострадания', 'пиздохуй', 'пиздошить', 'пиздрик', 'пиздуй', 'пиздун', 'пиздюк', 'пиздюли', 'пиздюлина', 'пиздюлька', 'пиздюля', 'пиздюрить', 'пиздюхать', 'пиздюшник', 'подзаебать', 'подзаебенить', 'поднаебнуть', 'поднаебнуться', 'поднаёбывать', 'подпёздывать', 'подпиздывает', 'подъебнуть', 'подъёбка', 'подъёбки', 'подъёбывать', 'поебать', 'поебень', 'попиздеть', 'попиздили', 'похую', 'похуярили', 'приебаться', 'припиздеть', 'припиздить', 'прихуяривать', 'прихуярить', 'проблядь', 'проебать', 'проебаться', 'проёб', 'пропиздить', 'разъебай', 'разъебаться', 'разёбанный', 'распиздон', 'распиздошил', 'распиздяй', 'распиздяйство', 'расхуюжить', 'расхуяривать', 'скотоёб', 'скотоёбина', 'сосихуйский', 'спиздил', 'страхоеёбище', 'сухопиздая', 'схуярить', 'съебаться', 'трепездон', 'трепездонит', 'туебень', 'тупиздень', 'уебался', 'уебать', 'уёбище', 'уёбищенски', 'уёбок', 'уёбывать', 'упиздить', 'хитровыебанный', 'хуев', 'хуеватенький', 'хуевато', 'худоёбина', 'хуебратия', 'хуеглот', 'хуегрыз', 'хуедин', 'хуелес', 'хуеман', 'хуемырло', 'хуеплёт', 'хуепутало', 'хуесос', 'хуета', 'хуетень', 'хуёвина', 'хуёвничать', 'хуёво', 'хуёвый', 'хуила', 'хуйло', 'хуйнуть', 'хуйня', 'хуярить', 'хуяция', 'хули', 'хуя', 'хуяк', 'хуячить', 'шароёбиться']
+
+
 def process_statistics(data):
     messages = data.get('messages', [])
     total_messages = len(messages)
@@ -23,17 +27,39 @@ def process_statistics(data):
 
     all_words = []
     laugh_count = 0
+    message_lengths = []
+    swear_count = 0
+    swear_frequencies = Counter()
+    messages_per_user_per_day = defaultdict(lambda: defaultdict(int))
     for message in messages:
         if 'text' in message:
             if isinstance(message['text'], list):
                 text_content = ' '.join([part.get('text', '') for part in message['text'] if isinstance(part, dict) and 'text' in part])
             else:
                 text_content = message['text']
-            words = re.findall(r'\b\w+\b', text_content.lower())
+            
+            # Normalize text
+            normalized_text = text_content.lower().replace('ё', 'е')
+            
+            words = re.findall(r'\b\w+\b', normalized_text)
             all_words.extend(words)
+            message_length = len(normalized_text)
+            if message_length > 0:  # Filter out messages with 0 characters
+                message_lengths.append(message_length)
 
-            if re.search(r'\b(ахах|хах|хаха|пазх|пах|ахзп|азпахз|апх|апз|аппа)\w*\b', text_content, re.IGNORECASE):
+            if re.search(r'\b(ахах|хах|хаха|пазх|пах|ахзп|азпахз|апх|апз|аппа)\w*\b', normalized_text, re.IGNORECASE):
                 laugh_count += 1
+
+            for swear in RUSSIAN_SWEARS:
+                if re.search(rf'(?<!\w){re.escape(swear)}(?!\w)', normalized_text, re.IGNORECASE):
+                    swear_count += 1
+                    swear_frequencies[swear] += 1
+
+        if 'date' in message and 'from' in message:
+            date = datetime.strptime(message['date'], "%Y-%m-%dT%H:%M:%S").date().isoformat()
+            user = message['from'] if message['from'] is not None else 'Unknown'
+            messages_per_user_per_day[user][date] += 1
+
     word_frequencies = Counter(all_words).most_common(500)
 
     messages_per_day = Counter(
@@ -83,6 +109,13 @@ def process_statistics(data):
 
     top_10_days = messages_per_day.most_common(10)
 
+    grouped_swear_frequencies = defaultdict(list)
+    for swear, count in swear_frequencies.items():
+        grouped_swear_frequencies[count].append(swear)
+    sorted_grouped_swear_frequencies = sorted(grouped_swear_frequencies.items(), key=lambda x: x[0], reverse=True)
+
+    suggested_swears = random.sample([swear for swear in RUSSIAN_SWEARS if swear not in swear_frequencies], 10)
+
     statistics = {
         "total_messages": total_messages,
         "average_messages_per_day": average_messages_per_day,
@@ -98,7 +131,14 @@ def process_statistics(data):
         "messages_per_month": dict(messages_per_month),
         "first_message_count": dict(first_message_count),
         "laugh_count": laugh_count,
-        "top_10_days": top_10_days
+        "message_length_distribution": dict(Counter(message_lengths)),
+        "top_10_days": top_10_days,
+        "messages_per_user_per_day": {user: dict(counts) for user, counts in messages_per_user_per_day.items()},
+        "swear_count": swear_count,
+        "swear_frequencies": dict(swear_frequencies),
+        "swear_rate": swear_count / total_messages * 100 if total_messages > 0 else 0,
+        "sorted_grouped_swear_frequencies": sorted_grouped_swear_frequencies,
+        "suggested_swears": suggested_swears
     }
 
     logging.debug(f"Statistics: {statistics}")

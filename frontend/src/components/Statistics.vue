@@ -1,44 +1,98 @@
 <template>
-  <div>
+  <div class="statistics-container">
     <h1>Chat Statistics</h1>
     <div v-if="statistics">
-      <p>Total Messages: {{ statistics.total_messages }}</p>
-      <p>Average Messages per Day: {{ statistics.average_messages_per_day.toFixed(2) }}</p>
+      <div class="stat-item">
+        <p>Total Messages: {{ statistics.total_messages }}</p>
+        <p>Average Messages per Day: {{ statistics.average_messages_per_day.toFixed(2) }}</p>
+      </div>
 
-      <h2>Percentage Rate (Largest First):</h2>
-      <ul>
-        <li v-for="(percentage, user) in sortedUserPercentages" :key="user">
-          {{ user }} - {{ percentage.toFixed(2) }}% ({{ statistics.user_message_counts[user] }} messages)
-        </li>
-      </ul>
+      <div class="stat-item">
+        <h2>Percentage Rate (Largest First):</h2>
+        <ul>
+          <li v-for="(percentage, user) in sortedUserPercentages" :key="user">
+            {{ user }} - {{ percentage.toFixed(2) }}% ({{ statistics.user_message_counts[user] }} messages)
+          </li>
+        </ul>
+      </div>
 
-      <h2>Average Response Times (Quickest First):</h2>
-      <ul>
-        <li v-for="(time, user) in sortedAverageResponseTimes" :key="user">
-          {{ user }} - {{ formatTime(time) }}
-        </li>
-      </ul>
+      <div class="stat-item">
+        <h2>Average Response Times (Quickest First):</h2>
+        <ul>
+          <li v-for="(time, user) in sortedAverageResponseTimes" :key="user">
+            {{ user }} - {{ formatTime(time) }}
+          </li>
+        </ul>
+      </div>
 
-      <TotalMessagesRateChart :userMessageCounts="statistics.user_message_counts" />
-      <CommonWordsList :commonWords="statistics.word_frequencies" />
-      <CommonWordsChart :commonWords="statistics.word_frequencies" />
-      <MessagesPerDayChart :messagesPerDay="statistics.messages_per_day" />
-
-      <h2>Top 10 Most Active Days:</h2>
+      <div class="stat-item">
+        <h2>Top 10 Most Active Days:</h2>
       <ul>
         <li v-for="(day, index) in statistics.top_10_days" :key="index">
           {{ day[0] }} - {{ day[1] }} messages
         </li>
       </ul>
+      </div>
 
-      <MessagesPerWeekChart :messagesPerWeek="statistics.messages_per_week" />
-      <MessagesPerWeekdayChart :messagesPerWeekday="statistics.messages_per_weekday" />
-      <MessagesByHourChart :messagesByHour="statistics.messages_per_hour" />
-      <MessagesByMonthChart :messagesByMonth="statistics.messages_per_month" />
-      <FirstMessagesChart :firstMessageCount="statistics.first_message_count" />
+      <div class="stat-item">
+        <h2>Laugh Expressions Counter:</h2>
+        <p>{{ statistics.laugh_count }}</p>
+      </div>
 
-      <h2 style="margin-top: 4vw;">Laugh Expressions Counter:</h2>
-      <p>{{ statistics.laugh_count }}</p>
+      <div class="stat-item">
+        <h2>Swear Words Statistics:</h2>
+        <p>Total Swears: {{ statistics.swear_count }}</p>
+        <p>Swear Rate: {{ statistics.swear_rate.toFixed(2) }}%</p>
+        <ul>
+          <li v-for="([count, swears], index) in sortedGroupedSwearFrequencies" :key="index">
+            {{ count }}: {{ swears.join(', ') }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="stat-item" style="margin-top: -20px;">
+        <h2>Suggested New Swear Words:</h2>
+        <ul>
+          <li v-for="(swear, index) in statistics.suggested_swears" :key="index">
+            {{ swear }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="chart-container">
+        <CommonWordsList :commonWords="statistics.word_frequencies" />
+      </div>
+
+      <div class="chart-container">
+        <TotalMessagesRateChart :userMessageCounts="statistics.user_message_counts" />
+      </div>
+      <div class="chart-container">
+        <CommonWordsChart :commonWords="statistics.word_frequencies" />
+      </div>
+      <div class="chart-container">
+        <MessagesPerDayChart :messagesPerDay="statistics.messages_per_day" />
+      </div>
+      <div class="chart-container" style="margin-top: 60px;">
+        <MessagesPerUserPerDayChart :statistics="statistics" />
+      </div>
+      <div class="chart-container">
+        <MessagesPerWeekChart :messagesPerWeek="statistics.messages_per_week" />
+      </div>
+      <div class="chart-container">
+        <MessagesPerWeekdayChart :messagesPerWeekday="statistics.messages_per_weekday" />
+      </div>
+      <div class="chart-container">
+        <MessagesByHourChart :messagesByHour="statistics.messages_per_hour" />
+      </div>
+      <div class="chart-container">
+        <MessagesByMonthChart :messagesByMonth="statistics.messages_per_month" />
+      </div>
+      <div class="chart-container" style="margin-top: 60px;">
+        <FirstMessagesChart :firstMessageCount="statistics.first_message_count" />
+      </div>
+      <div class="chart-container">
+        <MessageLengthDistributionChart :statistics="statistics" />
+      </div>
     </div>
     <div v-else>
       <p>Loading statistics...</p>
@@ -56,6 +110,8 @@ import MessagesPerWeekdayChart from './MessagesPerWeekdayChart.vue';
 import MessagesByHourChart from './MessagesByHourChart.vue';
 import MessagesByMonthChart from './MessagesByMonthChart.vue';
 import FirstMessagesChart from './FirstMessagesChart.vue';
+import MessageLengthDistributionChart from './MessageLengthDistributionChart.vue';
+import MessagesPerUserPerDayChart from './MessagesPerUserPerDayChart.vue';
 
 export default {
   components: {
@@ -68,6 +124,8 @@ export default {
     MessagesByHourChart,
     MessagesByMonthChart,
     FirstMessagesChart,
+    MessageLengthDistributionChart,
+    MessagesPerUserPerDayChart
   },
   props: {
     statistics: {
@@ -89,6 +147,9 @@ export default {
     };
   },
   computed: {
+    sortedGroupedSwearFrequencies() {
+      return this.statistics.sorted_grouped_swear_frequencies;
+    },
     sortedUserPercentages() {
       return Object.entries(this.statistics.user_percentages)
         .sort(([, a], [, b]) => b - a)
@@ -117,4 +178,17 @@ export default {
 </script>
 
 <style>
+.statistics-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.stat-item {
+  margin-bottom: 40px;
+}
+
+.chart-container {
+  margin-bottom: 40px;
+}
 </style>
