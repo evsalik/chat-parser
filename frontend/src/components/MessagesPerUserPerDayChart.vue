@@ -29,8 +29,8 @@ export default {
         fill: false,
         borderColor: this.getGrayShade(index),
         backgroundColor: this.getGrayShade(index),
-        borderWidth: 2, // Increase border width for better visibility
-        pointRadius: 3, // Add point radius for better visibility
+        borderWidth: 2,
+        pointRadius: 3,
         pointBackgroundColor: this.getGrayShade(index),
       }));
 
@@ -49,7 +49,7 @@ export default {
           plugins: {
             legend: {
               labels: {
-                color: '#000' // Set legend text color to black
+                color: '#000'
               }
             }
           }

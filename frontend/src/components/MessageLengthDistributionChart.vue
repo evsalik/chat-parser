@@ -25,7 +25,6 @@ export default {
       const ctx = document.getElementById('messageLengthChart').getContext('2d');
       const data = this.statistics.message_length_distribution;
 
-      // Filter out "0 chars" from the data
       const filteredData = Object.keys(data).reduce((acc, key) => {
         if (key !== '0') {
           acc[key] = data[key];

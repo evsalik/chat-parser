@@ -38,13 +38,12 @@ def process_statistics(data):
             else:
                 text_content = message['text']
             
-            # Normalize text
             normalized_text = text_content.lower().replace('ё', 'е')
             
             words = re.findall(r'\b\w+\b', normalized_text)
             all_words.extend(words)
             message_length = len(normalized_text)
-            if message_length > 0:  # Filter out messages with 0 characters
+            if message_length > 0:
                 message_lengths.append(message_length)
 
             if re.search(r'\b(ахах|хах|хаха|пазх|пах|ахзп|азпахз|апх|апз|аппа)\w*\b', normalized_text, re.IGNORECASE):
