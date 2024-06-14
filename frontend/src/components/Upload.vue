@@ -2,7 +2,8 @@
   <div>
     <h1>Upload Chat JSON</h1>
     <input type="file" @change="handleFileUpload" />
-    <button @click="uploadFile">Upload</button>
+    <button @click="uploadFile" :disabled="isLoading">Upload</button>
+    <div v-if="isLoading">Loading...</div>
     <div v-if="error" style="color: red;">
       <p>{{ error }}</p>
     </div>
@@ -16,6 +17,7 @@ export default {
     return {
       file: null,
       error: null,
+      isLoading: false,
     };
   },
   methods: {
@@ -28,6 +30,7 @@ export default {
         return;
       }
       this.error = null;
+      this.isLoading = true;
       let formData = new FormData();
       formData.append('file', this.file);
       try {
@@ -36,10 +39,11 @@ export default {
             'Content-Type': 'multipart/form-data',
           },
         });
-        // Pass data as a query parameter
         this.$router.push({ name: 'Statistics', query: { statistics: JSON.stringify(response.data) } });
       } catch (error) {
         this.error = 'Error uploading file: ' + (error.response ? error.response.data.error : error.message);
+      } finally {
+        this.isLoading = false;
       }
     },
   },
