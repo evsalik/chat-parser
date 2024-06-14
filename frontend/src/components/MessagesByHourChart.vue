@@ -24,8 +24,8 @@ export default {
   },
   computed: {
     chartData() {
-      const labels = Object.keys(this.messagesByHour).sort((a, b) => a - b);
-      const data = labels.map(hour => this.messagesByHour[hour]);
+      const labels = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+      const data = labels.map((label, index) => this.messagesByHour[index] || 0);
       return {
         labels,
         datasets: [
@@ -64,7 +64,6 @@ export default {
 
 <style scoped>
 .chart-container {
-  margin-top: 4vw;
   position: relative;
   height: 60vh;
   width: 100%;

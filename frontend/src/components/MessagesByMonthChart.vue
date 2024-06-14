@@ -24,8 +24,12 @@ export default {
   },
   computed: {
     chartData() {
-      const labels = Object.keys(this.messagesByMonth).sort();
-      const data = labels.map(month => this.messagesByMonth[month]);
+      const monthOrder = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+      const labels = monthOrder;
+      const data = labels.map(month => this.messagesByMonth[month] || 0);
       return {
         labels,
         datasets: [
@@ -65,7 +69,6 @@ export default {
 <style scoped>
 .chart-container {
   position: relative;
-  margin-top: 4vw;
   height: 60vh;
   width: 100%;
 }
