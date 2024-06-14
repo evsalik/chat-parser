@@ -41,6 +41,13 @@ def process_statistics(data):
     messages_per_weekday = Counter(
         [datetime.strptime(message['date'], "%Y-%m-%dT%H:%M:%S").strftime('%A') for message in messages if 'date' in message]
     )
+    
+    messages_per_hour = Counter(
+        [datetime.strptime(message['date'], "%Y-%m-%dT%H:%M:%S").hour for message in messages if 'date' in message]
+    )
+    messages_per_month = Counter(
+        [datetime.strptime(message['date'], "%Y-%m-%dT%H:%M:%S").strftime('%Y-%m') for message in messages if 'date' in message]
+    )
 
     first_message_per_day = defaultdict(list)
     for message in messages:
@@ -57,8 +64,11 @@ def process_statistics(data):
     user_message_counts = {('Unknown' if k is None else k): v for k, v in user_messages.items()}
     user_percentages = {('Unknown' if k is None else k): (v / total_messages) * 100 for k, v in user_messages.items()}
 
+    average_messages_per_day = total_messages / len(messages_per_day) if messages_per_day else 0
+
     statistics = {
         "total_messages": total_messages,
+        "average_messages_per_day": average_messages_per_day,
         "most_active_user": most_active_user,
         "user_message_counts": user_message_counts,
         "user_percentages": user_percentages,
@@ -66,6 +76,8 @@ def process_statistics(data):
         "messages_per_day": dict(messages_per_day),
         "messages_per_week": dict(messages_per_week),
         "messages_per_weekday": dict(messages_per_weekday),
+        "messages_per_hour": dict(messages_per_hour),
+        "messages_per_month": dict(messages_per_month),
         "first_message_count": dict(first_message_count)
     }
 

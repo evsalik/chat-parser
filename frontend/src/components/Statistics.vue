@@ -3,6 +3,7 @@
     <h1>Chat Statistics</h1>
     <div v-if="statistics">
       <p>Total Messages: {{ statistics.total_messages }}</p>
+      <p>Average Messages per Day: {{ statistics.average_messages_per_day.toFixed(2) }}</p>
       <p>Most active user: {{ statistics.most_active_user[0] }}</p>
       <h2>Percentage Rate:</h2>
       <ul>
@@ -17,6 +18,8 @@
       <MessagesPerWeekChart :messagesPerWeek="statistics.messages_per_week" />
       <MessagesPerWeekdayChart :messagesPerWeekday="statistics.messages_per_weekday" />
       <FirstMessagesChart :firstMessageCount="statistics.first_message_count" />
+      <MessagesByHourChart :messagesByHour="statistics.messages_per_hour" />
+      <MessagesByMonthChart :messagesByMonth="statistics.messages_per_month" />
     </div>
     <div v-else>
       <p>Loading statistics...</p>
@@ -32,6 +35,8 @@ import MessagesPerDayChart from './MessagesPerDayChart.vue';
 import MessagesPerWeekChart from './MessagesPerWeekChart.vue';
 import MessagesPerWeekdayChart from './MessagesPerWeekdayChart.vue';
 import FirstMessagesChart from './FirstMessagesChart.vue';
+import MessagesByHourChart from './MessagesByHourChart.vue';
+import MessagesByMonthChart from './MessagesByMonthChart.vue';
 
 export default {
   components: {
@@ -42,6 +47,8 @@ export default {
     MessagesPerWeekChart,
     MessagesPerWeekdayChart,
     FirstMessagesChart,
+    MessagesByHourChart,
+    MessagesByMonthChart
   },
   props: {
     statistics: {
