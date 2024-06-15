@@ -93,6 +93,21 @@
       <div class="chart-container">
         <MessageLengthDistributionChart :statistics="statistics" />
       </div>
+      <div class="chart-container">
+        <StickerEmojiChart :stickerEmojiCounts="statistics.sticker_emoji_counts" />
+      </div>
+      <div class="chart-container">
+        <VoiceMessageChart :voiceMessageCounts="statistics.voice_message_counts" />
+      </div>
+      <div class="chart-container">
+        <VideoMessageChart :videoMessageCounts="statistics.video_message_counts" />
+      </div>
+      <div class="chart-container">
+        <MessageLengthBoxPlot :userMessageLengths="statistics.user_message_lengths" />
+      </div>
+      <div>
+        <TimeBetweenMessagesChart :timeDifferences="statistics.time_differences" />
+      </div>
     </div>
     <div v-else>
       <p>Loading statistics...</p>
@@ -112,9 +127,19 @@ import MessagesByMonthChart from './MessagesByMonthChart.vue';
 import FirstMessagesChart from './FirstMessagesChart.vue';
 import MessageLengthDistributionChart from './MessageLengthDistributionChart.vue';
 import MessagesPerUserPerDayChart from './MessagesPerUserPerDayChart.vue';
+import StickerEmojiChart from './StickerEmojiChart.vue';
+import VoiceMessageChart from './VoiceMessageChart.vue';
+import VideoMessageChart from './VideoMessageChart.vue';
+import MessageLengthBoxPlot from './MessageLengthBoxPlot.vue';
+import TimeBetweenMessagesChart from './TimeBetweenMessagesChart.vue';
 
 export default {
   components: {
+    TimeBetweenMessagesChart,
+    MessageLengthBoxPlot,
+    VideoMessageChart,
+    VoiceMessageChart,
+    StickerEmojiChart,
     TotalMessagesRateChart,
     CommonWordsList,
     CommonWordsChart,
