@@ -24,8 +24,9 @@ export default {
   },
   computed: {
     chartData() {
-      const labels = Object.keys(this.firstMessageCount).sort();
-      const data = labels.map(user => this.firstMessageCount[user]);
+      const sortedEntries = Object.entries(this.firstMessageCount).sort((a, b) => b[1] - a[1]);
+      const labels = sortedEntries.map(entry => entry[0]);
+      const data = sortedEntries.map(entry => entry[1]);
       return {
         labels,
         datasets: [
@@ -53,6 +54,10 @@ export default {
             title: {
               display: true,
               text: 'User'
+            },
+            ticks: {
+              maxRotation: 90,
+              minRotation: 90
             }
           }
         }

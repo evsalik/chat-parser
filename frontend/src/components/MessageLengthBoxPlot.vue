@@ -24,14 +24,16 @@ export default defineComponent({
 
     onMounted(() => {
       const ctx = canvas.value.getContext('2d');
-      const labels = Object.keys(props.userMessageLengths);
-      const data = labels.map(user => {
+      const data = Object.keys(props.userMessageLengths).map(user => {
         const lengths = props.userMessageLengths[user];
         return {
           user,
           averageLength: lengths.reduce((acc, len) => acc + len, 0) / lengths.length,
         };
       });
+
+      // Sort data by average length in descending order
+      data.sort((a, b) => b.averageLength - a.averageLength);
 
       new Chart(ctx, {
         type: 'bar',

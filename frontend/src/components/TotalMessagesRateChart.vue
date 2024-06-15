@@ -6,10 +6,10 @@
 </template>
 
 <script>
-import { Bar } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+import { Bar } from 'vue-chartjs';
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 export default {
   name: 'TotalMessagesRateChart',
@@ -24,17 +24,19 @@ export default {
   },
   computed: {
     chartData() {
-      console.log("User Message Counts:", this.userMessageCounts)
+      const sortedEntries = Object.entries(this.userMessageCounts).sort((a, b) => b[1] - a[1]);
+      const labels = sortedEntries.map(entry => entry[0]);
+      const data = sortedEntries.map(entry => entry[1]);
       return {
-        labels: Object.keys(this.userMessageCounts),
+        labels,
         datasets: [
           {
             label: 'Message Count',
             backgroundColor: '#000000',
-            data: Object.values(this.userMessageCounts)
-          }
-        ]
-      }
+            data,
+          },
+        ],
+      };
     },
     chartOptions() {
       return {
@@ -52,13 +54,17 @@ export default {
             title: {
               display: true,
               text: 'Users'
+            },
+            ticks: {
+              maxRotation: 90,
+              minRotation: 90
             }
           }
         }
-      }
+      };
     }
   }
-}
+};
 </script>
 
 <style scoped>

@@ -26,7 +26,7 @@ export default defineComponent({
       const ctx = canvas.value.getContext('2d');
       const data = props.timeDifferences;
 
-      const binEdges = [0, 10, 30, 60, 120, 300, 600, 1800, 3600, 7200, 14400, 28800, 86400, 172800, 604800, 1209600];
+      const binEdges = [0, 3, 5, 10, 30, 60, 120, 300, 600, 1800, 3600, 7200, 14400, 28800, 86400, 172800, 604800, 1209600];
       const labels = [];
       const histogramData = new Array(binEdges.length - 1).fill(0);
 

@@ -24,8 +24,9 @@ export default {
   },
   computed: {
     chartData() {
-      const labels = Object.keys(this.videoMessageCounts);
-      const data = Object.values(this.videoMessageCounts);
+      const sortedEntries = Object.entries(this.videoMessageCounts).sort((a, b) => b[1] - a[1]);
+      const labels = sortedEntries.map(entry => entry[0]);
+      const data = sortedEntries.map(entry => entry[1]);
       return {
         labels,
         datasets: [
