@@ -1,6 +1,5 @@
 <template>
   <div class="chart-container">
-    <h2>Messages by Month</h2>
     <Bar :data="chartData" :options="chartOptions" />
   </div>
 </template>

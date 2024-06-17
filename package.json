@@ -9,7 +9,10 @@
     "start": "concurrently \"yarn workspace frontend serve\" \"yarn workspace backend start\""
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "autoprefixer": "^10.4.19",
+    "concurrently": "^8.2.2",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4"
   },
   "dependencies": {
     "axios": "^1.7.2",

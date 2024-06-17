@@ -1,6 +1,5 @@
 <template>
   <div class="chart-container">
-    <h2>Conversations Over Time</h2>
     <canvas ref="canvas"></canvas>
   </div>
 </template>

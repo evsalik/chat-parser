@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <h2>Messages Per User Per Day</h2>
+  <div class="chart-container">
     <canvas id="messagesPerUserPerDayChart"></canvas>
   </div>
 </template>
@@ -64,5 +63,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.chart-container {
+  position: relative;
+  margin: 20px 0;
+  height: 60vh;
+  width: 100%;
+}
 </style>

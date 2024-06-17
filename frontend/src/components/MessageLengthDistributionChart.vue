@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h2>Message Length Distribution</h2>
     <canvas id="messageLengthChart"></canvas>
     <p>fyi 58 chars is a length of a youtube shorts link =)</p>
   </div>

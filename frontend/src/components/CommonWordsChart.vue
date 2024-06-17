@@ -1,6 +1,5 @@
 <template>
   <div class="chart-container">
-    <h2>150 Most Common Words</h2>
     <Bar :data="chartData" :options="chartOptions" />
   </div>
 </template>

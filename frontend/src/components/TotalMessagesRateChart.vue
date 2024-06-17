@@ -1,6 +1,5 @@
 <template>
   <div class="chart-container">
-    <h2>User Message Count Chart</h2>
     <Bar :data="chartData" :options="chartOptions" />
   </div>
 </template>

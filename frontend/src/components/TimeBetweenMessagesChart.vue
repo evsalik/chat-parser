@@ -1,6 +1,5 @@
 <template>
   <div class="chart-container">
-    <h2>Time Between Messages</h2>
     <canvas ref="canvas"></canvas>
   </div>
 </template>

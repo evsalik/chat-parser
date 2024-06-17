@@ -1,6 +1,5 @@
 <template>
   <div class="chart-container">
-    <h2>Message Length Distribution by User</h2>
     <canvas ref="canvas"></canvas>
   </div>
 </template>
@@ -32,7 +31,6 @@ export default defineComponent({
         };
       });
 
-      // Sort data by average length in descending order
       data.sort((a, b) => b.averageLength - a.averageLength);
 
       new Chart(ctx, {

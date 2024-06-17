@@ -184,6 +184,7 @@ def process_statistics(data):
 
     conversation_lengths = [len(conv) for conv in conversations]
     sorted_conversation_lengths = sorted(conversation_lengths, reverse=True)
+    longest_conversation = max(conversation_lengths)
 
     statistics = {
         "total_messages": total_messages,
@@ -215,10 +216,12 @@ def process_statistics(data):
         "time_differences": time_differences,
         "conversations": len(conversations),
         "conversation_details": [{"start_time": conv[0]['date'], "end_time": conv[-1]['date'], "message_count": len(conv)} for conv in conversations],
-        "sorted_conversation_lengths": sorted_conversation_lengths
+        "sorted_conversation_lengths": sorted_conversation_lengths,
+        "longest_conversation": longest_conversation
     }
 
-    logging.debug(f"Statistics: {statistics}")
+    # logging.debug(f"Statistics: {statistics}")
+    logging.debug(messages_per_user_per_day)
 
     return statistics
 
@@ -235,7 +238,9 @@ def upload_file():
         file.save(filepath)
         with open(filepath) as f:
             data = json.load(f)
+            logging.debug("started processing")
             statistics = process_statistics(data)
+            logging.debug("completed processing")
         return jsonify(statistics)
     else:
         return jsonify({"error": "Invalid file format"}), 400

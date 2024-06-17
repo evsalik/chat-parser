@@ -1,6 +1,5 @@
 <template>
   <div class="chart-container">
-    <h2>Sorted Conversation Lengths</h2>
     <canvas ref="canvas"></canvas>
   </div>
 </template>

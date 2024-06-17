@@ -3,6 +3,7 @@ import App from './App.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import Upload from './components/Upload.vue';
 import Statistics from './components/Statistics.vue';
+import './assets/tailwind.css';
 
 const routes = [
   { path: '/', component: Upload },
