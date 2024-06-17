@@ -9,7 +9,3 @@ export default {
   name: "App",
 };
 </script>
-
-<style>
-/* Add your styles here */
-</style>

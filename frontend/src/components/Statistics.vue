@@ -108,6 +108,12 @@
       <div>
         <TimeBetweenMessagesChart :timeDifferences="statistics.time_differences" />
       </div>
+      <div>
+        <ConversationCountChart :conversations="statistics.conversation_details" />
+      </div>
+      <div>
+        <ConversationLengthsChart :sortedConversationLengths="statistics.sorted_conversation_lengths" />
+      </div>
     </div>
     <div v-else>
       <p>Loading statistics...</p>
@@ -132,6 +138,8 @@ import VoiceMessageChart from './VoiceMessageChart.vue';
 import VideoMessageChart from './VideoMessageChart.vue';
 import MessageLengthBoxPlot from './MessageLengthBoxPlot.vue';
 import TimeBetweenMessagesChart from './TimeBetweenMessagesChart.vue';
+import ConversationCountChart from './ConversationCountChart.vue';
+import ConversationLengthsChart from './ConversationLengthsChart.vue';
 
 export default {
   components: {
@@ -150,7 +158,9 @@ export default {
     MessagesByMonthChart,
     FirstMessagesChart,
     MessageLengthDistributionChart,
-    MessagesPerUserPerDayChart
+    MessagesPerUserPerDayChart,
+    ConversationCountChart,
+    ConversationLengthsChart,
   },
   props: {
     statistics: {

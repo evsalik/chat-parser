@@ -154,6 +154,37 @@ def process_statistics(data):
             message_length = len(text_content)
             user_message_lengths[user].append(message_length)
 
+    continuation_delays = [delay for delay in time_differences if delay < 60 * 60]  # delays less than 60 minutes
+    new_conversation_delays = [delay for delay in time_differences if delay >= 60 * 60]  # delays of 60 minutes or more
+
+    if continuation_delays:
+        continuation_mean = np.mean(continuation_delays)
+    else:
+        continuation_mean = 300  # default to 5 minutes
+
+    if new_conversation_delays:
+        new_conversation_mean = np.mean(new_conversation_delays)
+    else:
+        new_conversation_mean = 60 * 45  # default to 45 mins 
+
+    conversations = []
+    current_conversation = []
+    for i, message in enumerate(messages):
+        if i == 0:
+            current_conversation.append(message)
+        else:
+            time_difference = time_differences[i - 1]
+            if time_difference > 30 * continuation_mean:
+                conversations.append(current_conversation)
+                current_conversation = [message]
+            else:
+                current_conversation.append(message)
+    if current_conversation:
+        conversations.append(current_conversation)
+
+    conversation_lengths = [len(conv) for conv in conversations]
+    sorted_conversation_lengths = sorted(conversation_lengths, reverse=True)
+
     statistics = {
         "total_messages": total_messages,
         "average_messages_per_day": average_messages_per_day,
@@ -181,7 +212,10 @@ def process_statistics(data):
         "voice_message_counts": dict(voice_message_counts),
         "video_message_counts": dict(video_message_counts),
         "user_message_lengths": {user: lengths for user, lengths in user_message_lengths.items()},
-        "time_differences": time_differences
+        "time_differences": time_differences,
+        "conversations": len(conversations),
+        "conversation_details": [{"start_time": conv[0]['date'], "end_time": conv[-1]['date'], "message_count": len(conv)} for conv in conversations],
+        "sorted_conversation_lengths": sorted_conversation_lengths
     }
 
     logging.debug(f"Statistics: {statistics}")

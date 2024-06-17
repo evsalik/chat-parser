@@ -15,8 +15,10 @@
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
     "chartjs-chart-box-and-violin-plot": "^4.0.0",
+    "nprogress": "^0.2.0",
     "vue": "^3.4.29",
     "vue-chartjs": "^5.3.1",
+    "vue-progressbar": "^0.7.5",
     "vue-simple-progress": "^1.1.1"
   }
 }
