@@ -1,9 +1,11 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "app.py",
-  "license": "MIT",
   "scripts": {
     "start": "python3 app.py"
+  },
+  "dependencies": {
+    "flask": "^2.0.1",
+    "flask-cors": "^3.0.10"
   }
 }
