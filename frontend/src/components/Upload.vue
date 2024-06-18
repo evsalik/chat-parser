@@ -51,7 +51,7 @@ export default {
       let formData = new FormData();
       formData.append('file', this.file);
       try {
-        const response = await axios.post('http://127.0.0.1:5000/upload', formData, {
+        const response = await axios.post('https://chat-parser-279838eb8969.herokuapp.com/', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
