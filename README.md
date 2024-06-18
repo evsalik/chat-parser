@@ -8,7 +8,6 @@ This template should help get you started developing with Vue 3 and TypeScript i
 
 - Use [vue-tsc](https://github.com/vuejs/language-tools/tree/master/packages/tsc) for performing the same type checking from the command line, or for generating d.ts files for SFCs.
 
-
 ```
 parser-v0
 ├─ .gitignore
@@ -21,6 +20,7 @@ parser-v0
 │  ├─ index.html
 │  ├─ package-lock.json
 │  ├─ package.json
+│  ├─ postcss.config.js
 │  ├─ public
 │  │  └─ vite.svg
 │  ├─ src
@@ -28,36 +28,38 @@ parser-v0
 │  │  ├─ assets
 │  │  │  └─ tailwind.css
 │  │  ├─ components
-│  │  │  ├─ CommonWordsChart.vue
-│  │  │  ├─ CommonWordsList.vue
-│  │  │  ├─ ConversationCountChart.vue
-│  │  │  ├─ ConversationLengthsChart.vue
-│  │  │  ├─ FirstMessagesChart.vue
-│  │  │  ├─ MessageLengthBoxPlot.vue
-│  │  │  ├─ MessageLengthDistributionChart.vue
-│  │  │  ├─ MessagesByHourChart.vue
-│  │  │  ├─ MessagesByMonthChart.vue
-│  │  │  ├─ MessagesPerDayChart.vue
-│  │  │  ├─ MessagesPerUserPerDayChart.vue
-│  │  │  ├─ MessagesPerWeekChart.vue
-│  │  │  ├─ MessagesPerWeekdayChart.vue
+│  │  │  ├─ ChartSelection.vue
+│  │  │  ├─ StatItems.vue
 │  │  │  ├─ Statistics.vue
-│  │  │  ├─ StickerEmojiChart.vue
-│  │  │  ├─ TimeBetweenMessagesChart.vue
-│  │  │  ├─ TotalMessagesRateChart.vue
 │  │  │  ├─ Upload.vue
-│  │  │  ├─ VideoMessageChart.vue
-│  │  │  └─ VoiceMessageChart.vue
+│  │  │  └─ charts
+│  │  │     ├─ CommonWordsChart.vue
+│  │  │     ├─ CommonWordsList.vue
+│  │  │     ├─ ConversationCountChart.vue
+│  │  │     ├─ ConversationLengthsChart.vue
+│  │  │     ├─ FirstMessagesChart.vue
+│  │  │     ├─ MessageLengthBoxPlot.vue
+│  │  │     ├─ MessageLengthDistributionChart.vue
+│  │  │     ├─ MessagesByHourChart.vue
+│  │  │     ├─ MessagesByMonthChart.vue
+│  │  │     ├─ MessagesPerDayChart.vue
+│  │  │     ├─ MessagesPerUserPerDayChart.vue
+│  │  │     ├─ MessagesPerWeekChart.vue
+│  │  │     ├─ MessagesPerWeekdayChart.vue
+│  │  │     ├─ StickerEmojiChart.vue
+│  │  │     ├─ TimeBetweenMessagesChart.vue
+│  │  │     ├─ TotalMessagesRateChart.vue
+│  │  │     ├─ VideoMessageChart.vue
+│  │  │     └─ VoiceMessageChart.vue
 │  │  ├─ main.ts
 │  │  ├─ style.css
 │  │  └─ vite-env.d.ts
+│  ├─ tailwind.config.js
 │  ├─ tsconfig.json
 │  ├─ tsconfig.node.json
 │  └─ vite.config.ts
 ├─ package-lock.json
 ├─ package.json
-├─ postcss.config.js
-├─ tailwind.config.js
 └─ yarn.lock
 
 ```

@@ -60,8 +60,10 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 canvas {
   background-color: white;
+  height: 90%;
+  width: 100%;
 }
 </style>

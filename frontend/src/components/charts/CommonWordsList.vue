@@ -20,7 +20,7 @@ export default {
 
 <style>
 .list-container {
-  height: 400px;
+  height: 90%;
   overflow-y: scroll;
   border: 1px solid #ddd;
   padding: 10px;

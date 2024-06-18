@@ -11,20 +11,24 @@ import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, Li
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 export default {
-  name: 'MessagesPerWeekdayChart',
+  name: 'MessagesByMonthChart',
   components: {
     Bar
   },
   props: {
-    messagesPerWeekday: {
+    messagesByMonth: {
       type: Object,
       required: true
     }
   },
   computed: {
     chartData() {
-      const labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-      const data = labels.map(day => this.messagesPerWeekday[day] || 0);
+      const monthOrder = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+      const labels = monthOrder;
+      const data = labels.map(month => this.messagesByMonth[month] || 0);
       return {
         labels,
         datasets: [
@@ -51,7 +55,7 @@ export default {
           x: {
             title: {
               display: true,
-              text: 'Weekday'
+              text: 'Month'
             }
           }
         }
@@ -64,7 +68,7 @@ export default {
 <style scoped>
 .chart-container {
   position: relative;
-  height: 60vh;
+  height: 90%;
   width: 100%;
 }
 </style>

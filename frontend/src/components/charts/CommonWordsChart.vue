@@ -69,7 +69,7 @@ export default {
 <style scoped>
 .chart-container {
   position: relative;
-  height: 60vh;
+  height: 90%;
   width: 100%;
 }
 </style>

@@ -11,10 +11,10 @@ import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
 export default defineComponent({
-  name: 'ConversationCountChart',
+  name: 'MessageLengthDistributionByUser',
   props: {
-    conversations: {
-      type: Array,
+    userMessageLengths: {
+      type: Object,
       required: true,
     },
   },
@@ -23,29 +23,26 @@ export default defineComponent({
 
     onMounted(() => {
       const ctx = canvas.value.getContext('2d');
-      const data = props.conversations;
+      const data = Object.keys(props.userMessageLengths).map(user => {
+        const lengths = props.userMessageLengths[user];
+        return {
+          user,
+          averageLength: lengths.reduce((acc, len) => acc + len, 0) / lengths.length,
+        };
+      });
 
-      const dates = data.map(conv => conv.start_time);
-      const conversationCounts = dates.reduce((counts, date) => {
-        const day = date.split('T')[0];
-        counts[day] = (counts[day] || 0) + 1;
-        return counts;
-      }, {});
-
-      const labels = Object.keys(conversationCounts).sort();
-      const counts = labels.map(date => conversationCounts[date]);
+      data.sort((a, b) => b.averageLength - a.averageLength);
 
       new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: {
-          labels,
+          labels: data.map(d => d.user),
           datasets: [{
-            label: 'Number of Conversations',
-            data: counts,
+            label: 'Average Message Length',
+            data: data.map(d => d.averageLength),
             backgroundColor: 'rgba(0, 0, 0, 1)',
-            borderColor: 'rgba(50, 50, 50, 1)',
+            borderColor: 'rgba(0, 0, 0, 1)',
             borderWidth: 1,
-            fill: true,
           }],
         },
         options: {
@@ -56,13 +53,17 @@ export default defineComponent({
               beginAtZero: true,
               title: {
                 display: true,
-                text: 'Number of Conversations',
+                text: 'Average Message Length',
               },
             },
             x: {
               title: {
                 display: true,
-                text: 'Date',
+                text: 'Users',
+              },
+              ticks: {
+                maxRotation: 90,
+                minRotation: 90,
               },
             },
           },
@@ -80,7 +81,7 @@ export default defineComponent({
 <style scoped>
 .chart-container {
   position: relative;
-  height: 60vh;
+  height: 90%;
   width: 100%;
 }
 </style>

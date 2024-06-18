@@ -11,9 +11,9 @@ import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
 export default defineComponent({
-  name: 'ConversationLengthsChart',
+  name: 'ConversationCountChart',
   props: {
-    sortedConversationLengths: {
+    conversations: {
       type: Array,
       required: true,
     },
@@ -23,36 +23,29 @@ export default defineComponent({
 
     onMounted(() => {
       const ctx = canvas.value.getContext('2d');
-      const data = props.sortedConversationLengths;
+      const data = props.conversations;
 
-      const binEdges = [1, 2, 5, 10, 20, 30, 50, 75, 100, 133, 167, 200, 250, 300, 400, 500, 750, 1000, 2000];
-      const labels = [];
-      const histogramData = new Array(binEdges.length - 1).fill(0);
+      const dates = data.map(conv => conv.start_time);
+      const conversationCounts = dates.reduce((counts, date) => {
+        const day = date.split('T')[0];
+        counts[day] = (counts[day] || 0) + 1;
+        return counts;
+      }, {});
 
-      data.forEach(length => {
-        for (let i = 0; i < binEdges.length - 1; i++) {
-          if (length >= binEdges[i] && length < binEdges[i + 1]) {
-            histogramData[i] += 1;
-            break;
-          }
-        }
-      });
-
-      // Create labels for bins
-      for (let i = 0; i < binEdges.length - 1; i++) {
-        labels.push(`${binEdges[i]}-${binEdges[i + 1]}`);
-      }
+      const labels = Object.keys(conversationCounts).sort();
+      const counts = labels.map(date => conversationCounts[date]);
 
       new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
           labels,
           datasets: [{
             label: 'Number of Conversations',
-            data: histogramData,
+            data: counts,
             backgroundColor: 'rgba(0, 0, 0, 1)',
-            borderColor: 'rgba(0, 0, 0, 1)',
+            borderColor: 'rgba(50, 50, 50, 1)',
             borderWidth: 1,
+            fill: true,
           }],
         },
         options: {
@@ -69,11 +62,7 @@ export default defineComponent({
             x: {
               title: {
                 display: true,
-                text: 'Conversation Length (Messages)',
-              },
-              ticks: {
-                maxRotation: 90,
-                minRotation: 90,
+                text: 'Date',
               },
             },
           },
@@ -91,7 +80,7 @@ export default defineComponent({
 <style scoped>
 .chart-container {
   position: relative;
-  height: 60vh;
+  height: 90%;
   width: 100%;
 }
 </style>

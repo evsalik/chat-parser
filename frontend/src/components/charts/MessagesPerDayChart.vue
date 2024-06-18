@@ -11,26 +11,25 @@ import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, Li
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 export default {
-  name: 'FirstMessagesChart',
+  name: 'MessagesPerDayChart',
   components: {
     Bar
   },
   props: {
-    firstMessageCount: {
+    messagesPerDay: {
       type: Object,
       required: true
     }
   },
   computed: {
     chartData() {
-      const sortedEntries = Object.entries(this.firstMessageCount).sort((a, b) => b[1] - a[1]);
-      const labels = sortedEntries.map(entry => entry[0]);
-      const data = sortedEntries.map(entry => entry[1]);
+      const labels = Object.keys(this.messagesPerDay).sort();
+      const data = labels.map(date => this.messagesPerDay[date]);
       return {
         labels,
         datasets: [
           {
-            label: 'First Messages',
+            label: 'Messages',
             backgroundColor: '#000000',
             data,
           },
@@ -46,17 +45,13 @@ export default {
             beginAtZero: true,
             title: {
               display: true,
-              text: 'Number of First Messages'
+              text: 'Number of Messages'
             }
           },
           x: {
             title: {
               display: true,
-              text: 'User'
-            },
-            ticks: {
-              maxRotation: 90,
-              minRotation: 90
+              text: 'Date'
             }
           }
         }
@@ -69,7 +64,8 @@ export default {
 <style scoped>
 .chart-container {
   position: relative;
-  height: 60vh;
+  margin: auto;
+  height: 90%;
   width: 100%;
 }
 </style>

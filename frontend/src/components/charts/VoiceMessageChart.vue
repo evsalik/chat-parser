@@ -11,25 +11,26 @@ import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, Li
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 export default {
-  name: 'MessagesPerDayChart',
+  name: 'VoiceMessageChart',
   components: {
     Bar
   },
   props: {
-    messagesPerDay: {
+    voiceMessageCounts: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     chartData() {
-      const labels = Object.keys(this.messagesPerDay).sort();
-      const data = labels.map(date => this.messagesPerDay[date]);
+      const sortedEntries = Object.entries(this.voiceMessageCounts).sort((a, b) => b[1] - a[1]);
+      const labels = sortedEntries.map(entry => entry[0]);
+      const data = sortedEntries.map(entry => entry[1]);
       return {
         labels,
         datasets: [
           {
-            label: 'Messages',
+            label: 'Voice Messages',
             backgroundColor: '#000000',
             data,
           },
@@ -45,13 +46,17 @@ export default {
             beginAtZero: true,
             title: {
               display: true,
-              text: 'Number of Messages'
+              text: 'Voice Messages'
             }
           },
           x: {
             title: {
               display: true,
-              text: 'Date'
+              text: 'Users'
+            },
+            ticks: {
+              maxRotation: 90,
+              minRotation: 90
             }
           }
         }
@@ -64,8 +69,7 @@ export default {
 <style scoped>
 .chart-container {
   position: relative;
-  margin: auto;
-  height: 60vh;
+  height: 90%;
   width: 100%;
 }
 </style>

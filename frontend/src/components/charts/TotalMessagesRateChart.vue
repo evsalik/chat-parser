@@ -11,26 +11,26 @@ import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, Li
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 export default {
-  name: 'VideoMessageChart',
+  name: 'TotalMessagesRateChart',
   components: {
     Bar
   },
   props: {
-    videoMessageCounts: {
+    userMessageCounts: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
   computed: {
     chartData() {
-      const sortedEntries = Object.entries(this.videoMessageCounts).sort((a, b) => b[1] - a[1]);
+      const sortedEntries = Object.entries(this.userMessageCounts).sort((a, b) => b[1] - a[1]);
       const labels = sortedEntries.map(entry => entry[0]);
       const data = sortedEntries.map(entry => entry[1]);
       return {
         labels,
         datasets: [
           {
-            label: 'Video Messages',
+            label: 'Message Count',
             backgroundColor: '#000000',
             data,
           },
@@ -46,7 +46,7 @@ export default {
             beginAtZero: true,
             title: {
               display: true,
-              text: 'Video Messages'
+              text: 'Message Count'
             }
           },
           x: {
@@ -68,8 +68,7 @@ export default {
 
 <style scoped>
 .chart-container {
-  position: relative;
-  height: 60vh;
+  height: 90%;
   width: 100%;
 }
 </style>

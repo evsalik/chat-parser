@@ -11,10 +11,10 @@ import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
 export default defineComponent({
-  name: 'MessageLengthDistributionByUser',
+  name: 'ConversationLengthsChart',
   props: {
-    userMessageLengths: {
-      type: Object,
+    sortedConversationLengths: {
+      type: Array,
       required: true,
     },
   },
@@ -23,23 +23,33 @@ export default defineComponent({
 
     onMounted(() => {
       const ctx = canvas.value.getContext('2d');
-      const data = Object.keys(props.userMessageLengths).map(user => {
-        const lengths = props.userMessageLengths[user];
-        return {
-          user,
-          averageLength: lengths.reduce((acc, len) => acc + len, 0) / lengths.length,
-        };
+      const data = props.sortedConversationLengths;
+
+      const binEdges = [1, 2, 5, 10, 20, 30, 50, 75, 100, 133, 167, 200, 250, 300, 400, 500, 750, 1000, 2000];
+      const labels = [];
+      const histogramData = new Array(binEdges.length - 1).fill(0);
+
+      data.forEach(length => {
+        for (let i = 0; i < binEdges.length - 1; i++) {
+          if (length >= binEdges[i] && length < binEdges[i + 1]) {
+            histogramData[i] += 1;
+            break;
+          }
+        }
       });
 
-      data.sort((a, b) => b.averageLength - a.averageLength);
+      // Create labels for bins
+      for (let i = 0; i < binEdges.length - 1; i++) {
+        labels.push(`${binEdges[i]}-${binEdges[i + 1]}`);
+      }
 
       new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: data.map(d => d.user),
+          labels,
           datasets: [{
-            label: 'Average Message Length',
-            data: data.map(d => d.averageLength),
+            label: 'Number of Conversations',
+            data: histogramData,
             backgroundColor: 'rgba(0, 0, 0, 1)',
             borderColor: 'rgba(0, 0, 0, 1)',
             borderWidth: 1,
@@ -53,13 +63,13 @@ export default defineComponent({
               beginAtZero: true,
               title: {
                 display: true,
-                text: 'Average Message Length',
+                text: 'Number of Conversations',
               },
             },
             x: {
               title: {
                 display: true,
-                text: 'Users',
+                text: 'Conversation Length (Messages)',
               },
               ticks: {
                 maxRotation: 90,
@@ -81,7 +91,7 @@ export default defineComponent({
 <style scoped>
 .chart-container {
   position: relative;
-  height: 60vh;
+  height: 90%;
   width: 100%;
 }
 </style>

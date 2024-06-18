@@ -11,29 +11,26 @@ import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, Li
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 export default {
-  name: 'MessagesByMonthChart',
+  name: 'VideoMessageChart',
   components: {
     Bar
   },
   props: {
-    messagesByMonth: {
+    videoMessageCounts: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     chartData() {
-      const monthOrder = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-      ];
-      const labels = monthOrder;
-      const data = labels.map(month => this.messagesByMonth[month] || 0);
+      const sortedEntries = Object.entries(this.videoMessageCounts).sort((a, b) => b[1] - a[1]);
+      const labels = sortedEntries.map(entry => entry[0]);
+      const data = sortedEntries.map(entry => entry[1]);
       return {
         labels,
         datasets: [
           {
-            label: 'Messages',
+            label: 'Video Messages',
             backgroundColor: '#000000',
             data,
           },
@@ -49,13 +46,17 @@ export default {
             beginAtZero: true,
             title: {
               display: true,
-              text: 'Number of Messages'
+              text: 'Video Messages'
             }
           },
           x: {
             title: {
               display: true,
-              text: 'Month'
+              text: 'Users'
+            },
+            ticks: {
+              maxRotation: 90,
+              minRotation: 90
             }
           }
         }
@@ -68,7 +69,7 @@ export default {
 <style scoped>
 .chart-container {
   position: relative;
-  height: 60vh;
+  height: 90%;
   width: 100%;
 }
 </style>
