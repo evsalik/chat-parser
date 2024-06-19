@@ -40,18 +40,24 @@
     </div>
 
     <div class="stat-item mb-5">
-      <h2 class="text-xl font-medium mb-2">Swear Words Statistics:</h2>
-      <p>Total Swears: {{ statistics.swear_count }}</p>
-      <p>Swear Rate: {{ statistics.swear_rate.toFixed(2) }}%</p>
-      <ul>
-        <li v-for="([count, swears], index) in sortedGroupedSwearFrequencies" :key="index">
-          {{ count }}: {{ swears.join(', ') }}
-        </li>
-      </ul>
+      <h2 class="text-xl font-medium mb-2 cursor-pointer" @click="toggleSwearWordsVisibility">
+        Swear Words Statistics:
+      </h2>
+      <div v-if="showSwearWords">
+        <p>Total Swears: {{ statistics.swear_count }}</p>
+        <p>Swear Rate: {{ statistics.swear_rate.toFixed(2) }}%</p>
+        <ul>
+          <li v-for="([count, swears], index) in sortedGroupedSwearFrequencies" :key="index">
+            {{ count }}: {{ swears.join(', ') }}
+          </li>
+        </ul>
+      </div>
     </div>
 
     <div class="stat-item mb-5">
-      <h2 class="text-xl font-medium mb-2 cursor-pointer" @click="toggleSwearWordsVisibility">Suggested New Swear Words:</h2>
+      <h2 class="text-xl font-medium mb-2 cursor-pointer" @click="toggleSuggestedSwearsVisibility">
+        Suggested New Swear Words:
+      </h2>
       <ul v-if="showSuggestedSwears">
         <li v-for="(swear, index) in statistics.suggested_swears" :key="index">
           {{ swear }}
@@ -72,6 +78,7 @@ export default {
   },
   data() {
     return {
+      showSwearWords: false,
       showSuggestedSwears: false,
     };
   },
@@ -103,6 +110,9 @@ export default {
       return `${minutes}m ${remainingSeconds}s`;
     },
     toggleSwearWordsVisibility() {
+      this.showSwearWords = !this.showSwearWords;
+    },
+    toggleSuggestedSwearsVisibility() {
       this.showSuggestedSwears = !this.showSuggestedSwears;
     },
   },
